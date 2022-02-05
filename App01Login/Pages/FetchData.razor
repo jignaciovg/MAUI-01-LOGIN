@@ -1,4 +1,4 @@
-﻿@page "/fetchdata"
+﻿@page "/fetchdata/{JWT}"
 @layout MainLayout
 @using App01Login.Data
 @inject WeatherForecastService ForecastService
@@ -37,8 +37,9 @@ else
 }
 
 @code {
+	[Parameter]
+	public string JWT { get; set; }
 	private WeatherForecast[] forecasts;
-
 	protected override async Task OnInitializedAsync()
 	{
 		forecasts = await ForecastService.GetForecastAsync(DateTime.Now);
