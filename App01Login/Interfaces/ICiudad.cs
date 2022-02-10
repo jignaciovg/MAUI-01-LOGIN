@@ -7,8 +7,8 @@ using System.Threading.Tasks;
 
 namespace App01Login.Interfaces
 {
-    interface ILogin
+    internal interface ICiudad
     {
-        Task<Login> Authenticate(UserMin user);
+        Task<List<Ciudad>> GetAuthCiudadesAsync(string token);
     }
 }

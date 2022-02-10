@@ -1,7 +1,11 @@
 ﻿@page "/fetchdata/{JWT}"
 @layout MainLayout
+
 @using App01Login.Data
+@using App01Login.Model
+@using App01Login.Services
 @inject WeatherForecastService ForecastService
+@inject CiudadService CiudadService
 
 <h1>Weather forecast</h1>
 
@@ -39,6 +43,16 @@ else
 @code {
 	[Parameter]
 	public string JWT { get; set; }
+
+	private List<Ciudad> ciudades;
+
+	private async void getCiudades()
+	{
+		if (JWT != null)
+		{
+			ciudades = await CiudadService.GetAuthCiudadesAsync(JWT);
+		}
+	}
 	private WeatherForecast[] forecasts;
 	protected override async Task OnInitializedAsync()
 	{

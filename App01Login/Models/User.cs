@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace App01Login.Models
+namespace App01Login.Model
 {
     public class User : UserMin
     {

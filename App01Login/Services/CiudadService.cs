@@ -11,39 +11,42 @@ using System.Threading.Tasks;
 
 namespace App01Login.Services
 {
-    public class LoginService : ILogin
+    public class CiudadService:ICiudad
     {
         System.Net.Http.HttpClient client;
         string WebAPIUrl = string.Empty;
-        public LoginService()
+        public CiudadService()
         {
             client = new System.Net.Http.HttpClient();
         }
 
-        public async Task<Login> Authenticate(UserMin user)
+        public async Task<List<Ciudad>> GetAuthCiudadesAsync(string token)
         {
             await Task.Delay(1000);
-            //user.Password = Functions.GetSHA256(user.Password).ToUpper();
-
-
-            //WebAPIUrl = "http://189.254.239.133/LoginAppApi/api/login/autenticar";
-            WebAPIUrl = "http://192.168.1.72/api/Login/Auth";
-
-            //Con esta Api de ejemplo hice la prueba
-            //WebAPIUrl = "https://ej2services.syncfusion.com/production/web-services/api/Orders"; 
+            WebAPIUrl = "http://192.168.1.72/api/Ciudad/getAuth";
             var uri = new Uri(WebAPIUrl);
             try
             {
-                HttpContent _content = new StringContent(JsonConvert.SerializeObject(user));
+                HttpContent _content = new StringContent(JsonConvert.SerializeObject(token));
                 _content.Headers.ContentType = MediaTypeHeaderValue.Parse("application/json");
                 var response = await client.PostAsync(uri, _content);
 
                 if (response.IsSuccessStatusCode)
                 {
-                    Login _login = new Login();
+                    Ciudad _ciudad = new Ciudad();
                     var content = await response.Content.ReadAsStringAsync();
-                    _login = JsonConvert.DeserializeObject<Login>(content);
-                    return _login;
+                    _ciudad = (Ciudad)JsonConvert.DeserializeObject(content);
+                    List<Ciudad> ListaCiudad = new List<Ciudad>();
+                    for (int i = 0; i < content.Length; i++)
+                    {
+                        ListaCiudad.Add(new Ciudad()
+                        {
+                            Nombre = _ciudad.Nombre,
+                            Estado = _ciudad.Estado,
+                            Cp = _ciudad.Cp,
+                        });
+                        return ListaCiudad;
+                    }
                 }
             }
             catch (Exception ex)
@@ -52,5 +55,6 @@ namespace App01Login.Services
             return null;
         }
 
+        
     }
 }

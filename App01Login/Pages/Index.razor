@@ -13,20 +13,26 @@
 
 @code{
     string user;
-    string password;
-    Models.Login login = null;
-    Services.LoginService service;
-    private async void Login(){
-        if(user != null && password != null){
-            Models.UserMin userMin = new Models.UserMin(){
-                Nick = user,
-                Password = password
-            };
-            service = new Services.LoginService();
-            login = await service.Authenticate(userMin);
-            if(login.ID>0){
-                NavigationManager.NavigateTo("/fetchdata/" + login.Token);
-            }
-        }
-    }
+	string password;
+	Model.Login login = null;
+	Services.LoginService service;
+
+	private async void Login()
+	{
+		if (user != null && password != null)
+		{
+			Model.UserMin _usrMin = new Model.UserMin()
+				{
+					Nick = user,
+					Password = password
+				};
+			service = new Services.LoginService();
+			login = await service.Authenticate(_usrMin);
+
+			if (login.Token !="")
+			{
+				NavigationManager.NavigateTo("/fetchdata/" + login.Token);
+			}
+		}
+	}
 }
